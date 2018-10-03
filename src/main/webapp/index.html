@@ -1,10 +1,72 @@
 <!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
 <html>
     <head>
-        <title>Start Page</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Formulario</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <script
+            src="https://code.jquery.com/jquery-3.3.1.js"
+            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+        crossorigin="anonymous"></script>
+
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <form id="formulario" action="servlette" method="post">
+            <table class="container bg-light">
+                <h3>Formulario Tablas jQuery</h3>
+                <tr>
+                    <th>Altura de la tabla</th>
+                    <td><input type="number" maxlength="50" placeholder="altura" name="alto" required/></td>
+                </tr>
+                <tr>
+                    <th>Anchura de la tabla</th>
+                    <td><input type="number" maxlength="50" placeholder="anchura" name="ancho" required/></td>
+                </tr>
+                <tr>
+                    <td><input type="button" id="calcular" class="btn-warning" value="Calcular"/></td>
+                </tr>
+            </table>
+            
+            <div id="alerta" class="alert alert-success"></div>
+            <div id="error" class="alert alert-danger"></div>
+        </form>
+        
+        <script>
+            $(document).ready(function () {
+                $('#calcular').click(function () {
+                    $.ajax({
+                        url: "servlette",
+                        cache: false,
+                        method: "GET",
+                        dataType: "json",
+                        success: function (data) {
+                            var s = "";
+                            var arrayLength = data.length;
+                            for (i = 1; i <= arrayLength; i++) {
+                                s += '<table class="container"><tr>'; //s += " <h5>" + i + ": </h5>" + JSON.stringify(data[i]);
+                                var arrayLength2 = data[i].a.length;
+                                for (j = 1; j < arrayLength2; j++) {
+                                    s += "<td>" + "op1: " + data[i].i + "op2: " + data[j].j + "resultado==> " + data[j].j*data[j].i + "</td><br>";
+                                }
+                            }
+                            s += "</tr></table";
+                            $("#alerta").empty().append(s);
+                            $("#error").empty();
+                        },
+                        error: function (data) {
+                            $("#error").empty().append("Ha habido un erro, por favor inténtelo de nuevo."); //.append(JSON.stringify(data[i]));
+                            $("#alerta").empty();
+                        }
+                    });
+                });
+            });
+        </script>
+
     </body>
 </html>
